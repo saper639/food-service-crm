@@ -1,0 +1,27 @@
+<!-- user -->
+<template id='taUserNick'>
+	<a href="#" onclick="return false;" class='link_unstyled userDetail'>{{nickname}}</a>
+</template>
+<template id='taUser'>
+	<a href="#" onclick="return false;" class='link_unstyled userDetail'>
+		{{if user}}
+			<div class='avatar pull-left' style="width:40px">
+				<img src="{{ user.avatar | empty('/img/avatar_empty.png') }}" class='img-responsive img-circle'>
+			</div>	
+			<div style='margin:10% 0;'>{{user.nickname}}</div>
+			{{else}}
+				<div class='avatar pull-left' style="width:40px">
+					<img src="{{ avatar | empty('/img/avatar_empty.png') }}" class='img-responsive img-circle'>	
+				</div>
+				<div class='mv5'>{{nickname}}</div>	
+		{{fi}}	
+	</a>
+</template>
+<template id="taUserStatus">
+{{if status == 0}} <span class='text-gray text-nowrap' title='@(Register without confirm)'><i class="fas fa-circle" aria-hidden="true" ></i></span>
+	{{else if status == -1}}<span class='text-red text-nowrap' title='@(Removed)'><i class="fas fa-circle" aria-hidden="true" ></i></span>
+	{{else if status == 1}}<span class='text-green text-nowrap' title='@(Active)'><i class="fas fa-circle" aria-hidden="true" ></i></span>
+	{{else if status == 2}}<span class='text-gray text-nowrap' title='@(Blocked)'><i class="fas fa-circle" aria-hidden="true" ></i></span>
+{{fi}}
+</template>
+</script>	

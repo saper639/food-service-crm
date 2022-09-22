@@ -1,0 +1,15 @@
+.idea/
+tmp/*
+debug.pid
+debug.js.json
+*.log
+*.tmp
+*.mp3
+config
+config-debug
+config-release
+config-test
+logs/
+/config
+/node_modules
+/databases

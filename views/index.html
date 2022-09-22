@@ -1,0 +1,123 @@
+@{layout('')}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>@{helpers.title()}</title>        
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">     
+	@{import('vendor.min.css', 'app.min.css', 'vendor.min.js', 'app.min.js', 'favicon.ico')}
+</head>
+<body class="hold-transition skin-purple sidebar-mini fixed"> 	
+	<div data---="LAZY message__null__button:@(Close);style:2"></div>	
+	<div data---="audio__common.volume"></div>
+	<div data---="loading" class="hidden"></div>
+	<div data---="upload"></div>
+  	<div data---="notify"></div>   
+  	<div data---="confirm"></div>      
+  	<div data---="menu"></div>
+  <!-- 	<div data---="markdown"></div> -->
+  	<div data---="autocomplete__null__height:150"></div>
+  	<!-- wrapper -->
+  	<div class="wrapper" data---="exec">  
+  		<!-- header -->
+  	 	<header class="main-header">
+			<!-- logo -->
+	        <a href="/" class="logo">            
+	            <span class="logo-mini"><img src="/img/logo_mini.png"></span>            
+	            <span class="logo-lg"><img src="/img/logo_white.png"></span>          
+	        </a>
+	        <!-- user menu -->
+	        <nav class="navbar navbar-static-top">
+    			<!-- Sidebar toggle button-->
+    			<a href="#" class="sidebar-toggle fa5" data-toggle="push-menu" role="button">
+      				<span class="sr-only">Toggle navigation</span>
+    			</a>
+  
+			    <div class="navbar-custom-menu">
+			      <ul class="nav navbar-nav">     			        
+			        <li class="dropdown">
+			            <a href="#" class="dropdown-toggle" data-toggle="dropdown">              
+			                <i class="fas fa-user" aria-hidden="true"></i> @{user.login} <span class="caret"></span>
+			            </a>            
+			            <ul class="dropdown-menu" role="menu">     
+			                <li><a href="/profile"><i class="fa fa-cogs" aria-hidden="true"></i> @(Setting)</li>
+			                <li class="divider"></li>
+			                <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> @(Logout)</a></li>
+			            </ul>            
+			        </li>          
+			      </ul>
+			    </div>
+			</nav>	        
+  		</header>
+  		<!-- sidebar -->
+  		<aside class="main-sidebar">
+  			<section class="sidebar">                  
+			    <div class="user-panel">
+			    	<div class="pull-left image">  
+			          	<div class='ui-avatar-theme-default'></div>
+			        </div>
+			        <div class="pull-left info">  
+			          	<p><b>@{user.first_name} @{user.last_name}</b></p>
+			          	<p class='text-muted'>@{helpers.role()}</p>
+			        </div>
+			    </div>
+	    		<!-- sidebar menu -->
+			    @{view('widget/main_menu')}
+			    <!-- sidebar menu -->
+			</section> <!-- /.sidebar -->
+  		</aside>
+  		<div class="content-wrapper">   			
+            <section class="content-header">
+                <h3 data-bind="current.title__html:value__empty:...."></h3>                  
+                <p data-bind="current.description__html:value"></p>
+                <!-- <ol class="breadcrumb">
+			        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+			        <li><a href="#">Forms</a></li>
+			        <li class="active">General Elements</li>
+      			</ol> -->
+            </section>
+  			<section class="content">  
+                <!-- pages -->
+                	@{view('widget/pages')}
+                <!-- pages -->
+	  		</section>	
+  		</div>	
+   	</div>
+  	<!-- wrapper -->
+  	@{view('widget/helper')}
+  	@{json(user, 'userdata')}
+  	<script>
+  		DEF.api = '/api/';
+  		NAV.clientside('.R');
+
+		var common = {};
+
+		var user = PARSE($('#userdata').html());
+		//initials
+		$('.ui-avatar-theme-default').html(Thelpers.initials(user.first_name+' '+user.last_name));
+
+		ON('@flag showloading', function() {
+			SETTER('loading/show');
+		});
+
+		ON('@flag hideloading', function() {
+			SETTER('loading/hide', 1000);
+		});
+		//error 404
+		ON('404', function(){
+			REDIRECT('/');
+		});
+		//ready spa
+		ON('ready', function() {
+		});
+		//dashboard
+		ROUTE('/', function() {
+			SET('common.page', 'dashboard');
+		});
+		//user
+		ROUTE('/user/search', function() {
+			SET('common.page', 'user_search');
+		});
+  	</script>	
+</body>
+</html>

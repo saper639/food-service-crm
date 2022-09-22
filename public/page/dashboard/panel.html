@@ -1,0 +1,15 @@
+<div class='box box-default' data-scope="Dashboard">
+	<div class="box-header with-border">        
+	</div>
+	<div class="box-body">
+		<p>@(Main information about product)</p>
+	</div>
+</div>
+<script>
+PLUGIN('Dashboard', function(exports){	
+	exports.reload = function() {		
+		SET('current.title', '@(Dashboard)');
+		SET('current.description', '@(Information about service)');
+	};	
+})	
+</script>

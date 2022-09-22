@@ -1,0 +1,3 @@
+NEWSCHEMA('User', function(schema) {
+
+})

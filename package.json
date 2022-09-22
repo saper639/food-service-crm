@@ -1,0 +1,16 @@
+{
+  "name": "food_service_crm",
+  "version": "0.0.1",
+  "description": "CRM for food service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mysql2": "^2.3.3",
+    "sqlagent": "^12.1.1",
+    "total.js": "^3.4.13"
+  }
+}
