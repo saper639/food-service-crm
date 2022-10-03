@@ -1,7 +1,7 @@
 exports.install = function() {
     ROUTE('+GET /*'                             );
     ROUTE('GET  /login',              view_login);   
-    ROUTE('GET  /logout'	,     logout    ); 
+    ROUTE('GET  /logout'	,         logout    ); 
 }
 
 function view_login() {

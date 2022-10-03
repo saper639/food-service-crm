@@ -4,8 +4,11 @@
  var _this = this;
 
  exports.Role = {
-     'admin'    : 1,  //admin
-     'manager'  : 2,  //manager
+    'guest'    : 0,  //guest
+    'admin'    : 1,  //admin
+    'manager'  : 2,  //manager
+    'user'     : 3,  //user
+    'courier'  : 4,  //courier 
  }
  
  exports.Dic = { 
