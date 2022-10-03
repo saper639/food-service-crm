@@ -1,3 +1,5 @@
+var Pr = MODULE('Promise');   
+
 NEWSCHEMA('User', function(schema) {
 	schema.define('id'        		, 'Number'     	  	          );  	
 	schema.define('first_name'      , 'String(50)',  true, 'cu' 	  );  	
@@ -40,7 +42,7 @@ NEWSCHEMA('User', function(schema) {
 			if (o.email) builder.where('email', o.email);
 			if (o.login) builder.where('!lower(login)', o.login);  
 			if (o.role) builder.in('role', o.role);	    	
-			if (o.pass) builder.where('pass', o.pass.md5());	    				
+			if (o.password) builder.where('password', o.password.md5());	    				
 			if (U.isArray(o.status)) builder.in('status', o.status);      		                  		
 	       		else if (typeof o.status == 'string') builder.in('status', (o.status == 'active') ? [1] : (o.status == 'all') ? [0,1] : [0]);                             	
 	        	else if (isNum(o.status)) builder.where('status', o.status);                               
@@ -112,17 +114,31 @@ NEWSCHEMA('User', function(schema) {
 
 
 NEWSCHEMA('User/Login', function(schema) {
-	schema.define('email',     'String(100)', true);
-	schema.define('pass',      'String(40)',  true);    
-	schema.define('autologin', Boolean, false);
+	schema.define('login', 	       'String(40)',  true);
+	schema.define('password',      'String(50)',  true);    
+	schema.define('autologin', 	   'Boolean',    false);
 
 	schema.addWorkflow('exec', async function($) {
 	    try {
-		   //
+       		var model = schema.clean($.model);
+            var user = await Pr.get('User', model);	
+
+            if (!user) {            	
+                $.success(false, RESOURCE('!user_pass'));                
+                return; 
+            }		
+
+            var opt = {};
+            opt.name = CONF.cookie;
+            opt.key = CONF.cookie_secret;
+            opt.id = user.id;
+            opt.expire = (model.autologin) ? '20 days' : '1 day';    
+            opt.data = user;  
+            MAIN.session.setcookie($, opt, $.done());            
+            AUDIT('users', $, 'login', user.id + ': ' + user.login);            	
         } catch (err) {
 		    LOGGER('error', 'Login', err);                 
-	        $.invalid('!auth');                    
-        	return;
+	        return $.success(false, RESOURCE('!auth'));                            	
  		} 
     })
 })
