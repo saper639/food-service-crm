@@ -37,6 +37,14 @@ exports.setConstant = function() {
 exports.setCompany = function() {	
 	F.global.company = U.parseJSON(CONF.company)||{};          	
 }
+/** 
+ * set CDN
+ */
+exports.setCDN = function() {
+    MAIN.cdn = {};    
+    CONF.cdn = U.parseJSON(CONF.cdn)||{};        
+    MAIN.cdn.upload = CONF.cdn.host+'/upload?key='+CONF.cdn.key;    
+}
 /**
  * Type of root directory depending on the role
  * @param {Number} role role type
