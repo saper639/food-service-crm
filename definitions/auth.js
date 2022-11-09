@@ -6,7 +6,7 @@
  MAIN.session = SESSION();
  
  MAIN.session.ondata = function(meta, next) {	
-    $$$('User').get({'id': meta.id}, (err, resp) => next(err, resp))
+    $$$('User').get({'id': meta.id}, (err, resp) => next(err, resp.value))
  };	
  
  AUTH(function($) {
@@ -22,8 +22,7 @@
 	    //console.log(user);
 	    //console.log(meta);	 
         //$.success({id:1, first_name: 'Pechenegov', last_name: 'Ivan', login: 'ivan.p', role: 2});
-        if (user) {						
-            console.log(user)
+        if (user) {						            
             $.roles(roles[user.role]);			
             $.success(user);
         } else $.invalid();
