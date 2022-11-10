@@ -109,6 +109,37 @@ NEWSCHEMA('User', function(schema) {
 	});
 
 	schema.addWorkflow('grid', function($) {		
+		var o = $.query||{};
+		o.page = o.page||1;
+        o.limit = o.limit||30;
+
+		var sql = DB(); 
+		sql.debug = true;         
+		sql.listing('user', 'user').make(function(builder) {                        
+            if (o.sort) builder.sort(o.sort, (o.order=='asc') ? false : true);
+                else builder.sort('created_at', true);
+            if (o.search) {
+                builder.scope(function() {                  
+                    builder.like('login', o.search, '*');         
+                    builder.or();
+                    builder.like('email', o.search, '*');                                 
+                });                 
+            };            
+            if (isNum(o.status)) {
+            	builder.where('status', o.status);                         
+            } else builder.where('status', '>', -1);                         
+            builder.page(o.page, o.limit);
+        }); 
+
+        sql.exec(function(err, resp) {
+			if (err) {
+				LOGGER('error', 'User/grid', err);
+				$.callback([]);
+			}
+			$.callback({'total': resp.count, 'rows': resp.items});
+		}, 'user');	
+
+
     });
 })
 
