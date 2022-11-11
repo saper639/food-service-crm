@@ -1,0 +1,15 @@
+<div class='box box-default' data-scope="ProductSearch">
+	<div class="box-header with-border">        
+	</div>
+	<div class="box-body">
+		<p>@(Product search)</p>
+	</div>
+</div>
+<script>
+PLUGIN('ProductSearch', function(exports){	
+	exports.reload = function() {		
+		SET('current.title', '@(Product search)');
+		SET('current.description', '@(You can search product)');
+	};	
+})	
+</script>

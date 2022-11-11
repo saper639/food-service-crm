@@ -13,7 +13,8 @@ body { padding: 0; margin: 0; font-family: Helvetica, Arial, sans-serif; font: n
 .sidebar-collapse .user-panel>.image .ui-avatar-theme-default img { max-width: 28px; max-height: 28px;}
 .content-header > .breadcrumb {float: right; position: absolute; top: 15px; right: 10px;}
 .sidebar-menu, .main-sidebar .user-panel, .sidebar-menu > li.header { white-space: normal; }
-.sidebar-menu > li > a { padding: 4px 5px 4px 15px; }
+.sidebar-menu > li > a { padding: 12px 5px 12px 15px; display: block; }
+.sidebar-menu > li > a > .fas { width: 25px;}
 .user-panel > .info { position: unset; }
 .user-panel > .info > p { font-weight: normal; line-height: 24px; margin: 0; }
 .sidebar-menu > li > a > .fas { width: 25px;}
