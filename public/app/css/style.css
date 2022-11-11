@@ -66,7 +66,6 @@ body { padding: 0; margin: 0; font-family: Helvetica, Arial, sans-serif; font: n
 .form-inline.search .form-group {margin-right: 10px;}
 .form-inline.search .form-control { width: 100%; }
 .form-inline.search select.form-control { margin-top:-1px; }
-.btn i {margin-right: 5px;}
 
 .bootstrap-table #toolbar {margin: 0 5px;}
 .form-group.has-error .help-block {font-size: 10px; margin-top: 0; margin-bottom: 5px;}

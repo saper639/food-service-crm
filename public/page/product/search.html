@@ -1,15 +1,106 @@
-<div class='box box-default' data-scope="ProductSearch">
-	<div class="box-header with-border">        
-	</div>
-	<div class="box-body">
-		<p>@(Product search)</p>
-	</div>
+<div class="row" data-scope="ProductSearch">
+	<div class='col-md-2'>
+		<div class='box box-default'>
+			<div class="box-header with-border">
+            	@(Category)
+            	<div class="box-tools pull-right">	                
+					<div class="btn-group btn-group-sm">
+	                   <button title="@(Add category)" type="button" class="btn btn-default text-green"><i class="fas fa-plus"></i></button>
+                        <button title="@(Edit category)" type="button" class="btn btn-default"><i class="fas fa-edit"></i></button>
+                        <button title="@(Remove category)" type="button" class="btn btn-default text-red"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+              	</div>
+        	</div>	
+        	<div class="box-body">
+				<div data---="listbox__?.category_id__height:250;search:Search category...;datasource:?.list.Category;type:number;exec:?/changeCategory"></div>  			
+			</div>
+		</div>	
+	</div>		
+	<div class='col-md-10'>		
+		<div class='box box-default'>
+			<div class="box-header with-border">
+            	@(Product)
+            	<div class="box-tools pull-right">	                
+					<div class="btn-group btn-group-sm">
+	                   	<button title="@(Add product)" type="button" class="btn btn-default text-green"><i class="fas fa-plus"></i></button>          
+                       	<button title="@(Change category choice product)" type="button" class="btn btn-default"><i class="fas fa-exchange-alt"></i></button>
+                        <button title="@(Remove choice product)" type="button" class="btn btn-default text-red"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+              	</div>      	
+        	</div>	
+			<div class="box-body">
+				<div data---='btt__?.datagrid__name:gridProduct;export:false;locale:en-US'>					        	        			
+					<script type="text/plain">
+						{
+							classes : 'table table-bordered table-hover table-striped table-condensed',
+							cookie : true,	
+							cookieStorage : 'localStorage',															
+							url: '/api/product/grid',				        				       				
+							queryParams: PLUGIN('ProductSearch').queryParams, 						       			
+							pagination: true,				  						  						  		
+							pageList : [25, 50, 100, 'All'],					  		
+							pageSize : 50,
+							showColumns: true,	
+				  			search: true,		      										  										
+							onCheck : PLUGIN('ProductSearch').onGridCheck, 
+							onUncheck : PLUGIN('ProductSearch').onGridUncheck, 
+							uniqueId: 'id',																		
+				  			columns: [ 				  							
+				  				{ field: 'ck',    checkbox: true },	  						  				
+				  				{ field: 'id',    title: '#', switchable: false, forceExport: true, sortable: true },	
+				  				{ field: 'thumb',   title: '@(Thumb)', width: 150, align: 'center', tpl:'#taProductThumb',  },	
+				  				{ field: 'name',  title: '@(Name)', sortable: true },				  				
+				  				{ field: 'summary',  title: '@(Summary)', width: 300, sortable: true },				  				
+				  				{ field: 'status',  title: '@(Status)', width: 50, tpl:'#taProductStatus', sortable: true, align: 'center' },				  			
+				  				{ field: 'created_at',  title: '@(Created)', sortable: true, render : "return new Date(val).format('yyyy-MM-dd hh:mm:ss')" },				  				
+				  				{ field: 'updated_at',  title: '@(Updated)', sortable: true, render : "return (val) ? new Date(val).format('yyyy-MM-dd hh:mm:ss') : '-'" },
+				  				{ field: 'action', title: '', width: 90, align: 'center', tpl:'#taProductAct', events: PLUGIN('ProductSearch').productEvents, clickToSelect: false, switchable: false }				  				
+				  			]
+						}
+					</script>	
+				</div>
+			</div>	
+		</div>	
+	</div>		
 </div>
 <script>
 PLUGIN('ProductSearch', function(exports){	
+	SET('?.category_id', 0);
 	exports.reload = function() {		
 		SET('current.title', '@(Product search)');
 		SET('current.description', '@(You can search product)');
+		EXEC('?/refreshCategories');
+	};	
+
+	exports.refreshCategories = function() {		
+		AJAX('GET /api/product/category/query', {}, (resp)=>{			
+			if (!resp.success) return;
+			SET('?.list.CategoryEmpty', CLONE(resp.value));
+			resp.value.unshift({id: 0, 'name': '@(All category)'});
+			SET('?.list.Category', resp.value);			
+		})	
+	};
+
+	exports.changeCategory = function(c) {		
+		refreshGrid();
+	};	
+
+	exports.queryParams = function(params) {
+		params.category_id = GET('?.category_id');	
+		return params;
+	};
+
+	function refreshGrid() {					
+		FIND('.datagrid').refresh();
+	}	
+
+
+	exports.onGridCheck = function(row, el) {			
+		FIND('.datagrid').grid.bootstrapTable('checkBy', {field: 'up', values: [row.id]});					
+	};	
+
+	exports.onGridUncheck = function(row, el) {		
+		FIND('.datagrid').grid.bootstrapTable('uncheckBy', {field: 'up', values: [row.id]});					
 	};	
 })	
 </script>

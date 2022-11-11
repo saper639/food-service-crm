@@ -13,8 +13,9 @@ version                     : 0.0.1
 author                      : ESSTU student
 cookie                      : __user
 cookie_secret               : cpbbd83hd92gd
-//db                        : 
+db                          : mysql://<user>:<password>@<host>:<port>/<db>
 db_log                      : true
+cdn                         : {"host": "http://45.153.231.101:8989", "key":"gjkd75893"}
 //Company
 company                     : {"brand": "Univer", "name": "Ltd.Univer", "phone": "+7 (9021) 999-999", "email": "support@univer.im", "web" : "http://univer.im"}
 //Setting
