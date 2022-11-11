@@ -151,8 +151,9 @@ NEWSCHEMA('User/Login', function(schema) {
 
 	schema.addWorkflow('exec', async function($) {
 	    try {
-       		var model = schema.clean($.model);
+       		var model = schema.clean($.model);       		
             var user = await Pr.get('User', model);	
+                        
             if (!user) {            	
                 $.success(false, RESOURCE('!user_pass'));                
                 return; 
