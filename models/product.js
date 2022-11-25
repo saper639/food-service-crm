@@ -44,6 +44,29 @@ NEWSCHEMA('Product').make(function(schema) {
 		}, 'product')	
 	});	
 
+    schema.setRemove(function ($) { 
+        var o = Object.assign({}, U.isEmpty($.params) ? $.options : $.params);                                          
+        var sql = DB();         
+        sql.debug = true;
+        
+        if (!o.id) return $.success(false);
+
+        sql.update('product', 'product').make(function (builder) {            
+            builder.set('status', -1);  //change status     
+            builder.where('id', o.id);          
+        })  
+
+        sql.exec(function(err, resp) {                      
+            if (err) {
+                LOGGER('error', 'Product/remove', err);
+                return $.success(false);
+            }                       
+            if (!resp) $.success(false, 'Product not found');
+            return $.success(true);
+        }, 'product')  
+
+    });
+
     schema.setSave(function ($) {     
     	var model = schema.clean($.model); 
 		var isINSERT = (model.id ==0) ? true : false;  

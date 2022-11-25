@@ -22,14 +22,14 @@
             	@(Product)
             	<div class="box-tools pull-right">	                
 					<div class="btn-group btn-group-sm">
-	                   	<button title="@(Add product)" type="button" class="btn btn-default text-green"><i class="fas fa-plus"></i></button>          
+	                   	<button title="@(Add product)" type="button" class="btn btn-default text-green exec" data-exec="?/addProduct"><i class="fas fa-plus"></i></button>          
                        	<button title="@(Change category choice product)" type="button" class="btn btn-default"><i class="fas fa-exchange-alt"></i></button>
                         <button title="@(Remove choice product)" type="button" class="btn btn-default text-red"><i class="fas fa-trash-alt"></i></button>
                     </div>
               	</div>      	
         	</div>	
 			<div class="box-body">
-				<div data---='btt__?.datagrid__name:gridProduct;export:false;locale:en-US'>					        	        			
+				<div data---='btt__?.dataProductgrid__name:gridProduct;export:false;locale:en-US'>        			
 					<script type="text/plain">
 						{
 							classes : 'table table-bordered table-hover table-striped table-condensed',
@@ -63,6 +63,7 @@
 		</div>	
 	</div>		
 </div>
+<div data-import='url:/page/product/win/create.html'></div>
 <script>
 PLUGIN('ProductSearch', function(exports){	
 	SET('?.category_id', 0);
@@ -82,7 +83,7 @@ PLUGIN('ProductSearch', function(exports){
 	};
 
 	exports.changeCategory = function(c) {		
-		refreshGrid();
+		EXEC('?/refreshGrid');
 	};	
 
 	exports.queryParams = function(params) {
@@ -90,10 +91,35 @@ PLUGIN('ProductSearch', function(exports){
 		return params;
 	};
 
-	function refreshGrid() {					
-		FIND('.datagrid').refresh();
-	}	
+	exports.addProduct = function() {		
+		SET('common.form', 'product_cu');
+	};
 
+	exports.refreshGrid = function() {					
+		FIND('.dataProductgrid').refresh();
+	};
+
+	exports.productEvents = {
+		'click .edit': function (e, value, row, index) {
+			RECONFIGURE('#product_cu', { title: '@(Edit product)' });
+			SET('winProductCU.form', row);
+			SET('common.form', 'product_cu');			
+	    },	
+	    'click .remove': function (e, value, row, index) {
+			SETTER('confirm', 'show2', '@(Do you really want to remove the product <b>{0}</b>?)'.format(row.name), ['"trash-alt" Remove', 'Cancel'], () => {
+				AJAX('DELETE /api/product/{0}'.format(row.id), {}, (resp, err)=>{
+					if (err || !resp.success) {
+						SETTER('notify', 'append', '@(Error when deleting the product)', 2);
+						return;
+					}					
+					EXEC('?/refreshGrid');
+					SETTER('notify', 'append', '@(Product has been successfully removed)');					
+					return;
+				})	
+			});	
+
+	    },	
+	};			
 
 	exports.onGridCheck = function(row, el) {			
 		FIND('.datagrid').grid.bootstrapTable('checkBy', {field: 'up', values: [row.id]});					
@@ -102,5 +128,5 @@ PLUGIN('ProductSearch', function(exports){
 	exports.onGridUncheck = function(row, el) {		
 		FIND('.datagrid').grid.bootstrapTable('uncheckBy', {field: 'up', values: [row.id]});					
 	};	
-})	
+});	
 </script>

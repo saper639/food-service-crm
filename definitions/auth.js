@@ -18,9 +18,9 @@
      opt.extendcookie = true;    // Extends cookie expiration (default: true)	
 
      MAIN.session.getcookie($, opt, function(err, user, meta, init) {							
-	    //console.log(err);
-	    //console.log(user);
-	    //console.log(meta);	 
+        //console.log(err);
+        //console.log(user);
+        //console.log(meta);	 
         //$.success({id:1, first_name: 'Pechenegov', last_name: 'Ivan', login: 'ivan.p', role: 2});
         if (user) {						            
             $.roles(roles[user.role]);			
