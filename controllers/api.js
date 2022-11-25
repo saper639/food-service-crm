@@ -22,7 +22,8 @@ exports.install = function() {
     FILE('/cdn/image/',     img_proxy     ,           ['.jpg', '.jpeg', '.png', '.gif']);
 }
 
-function img_proxy(req, res) {            
-    res.proxy(CONF.cdn.host+'/'+req.path.slice(-2).join('/'), NOOP);
+function img_proxy(req, res) {         
+    var query = (req.uri.query) ? '?'+req.uri.query : '';
+    res.proxy(CONF.cdn.host+'/'+req.path.slice(-2).join('/')+query, NOOP);
     return;
 }
