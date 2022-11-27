@@ -10,3 +10,5 @@ MODULE('Utilit').setConstant();
 MODULE('Utilit').setCompany();    
 //выбрать cdn
 MODULE('Utilit').setCDN();
+//активируем MQTT
+MODULE('MQTT').init(); 

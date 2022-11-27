@@ -17,6 +17,7 @@
   	<div data---="menu"></div>
   	<div data---="websocket__wsmess__url:/ws"></div>  
   	<div data---="autocomplete__null__height:150"></div>
+  	<div data---="toast__null__timeout:6;format:dd\.MM\.yyyy hh\:mm;animate:fade;"></div>
   	<!-- wrapper -->
   	<div class="wrapper">  
   		<!-- header -->
@@ -133,7 +134,11 @@
 			SET('common.page', 'order_search');
 		});
 		ON('message', function(data) {
-			console.log(data);
+			switch (data.type) {
+				case 'notify' : 
+					FIND('toast').success('<b>@(New order)</b><br>Order id: {0}'.format(data.value.orderId), {'timeout': 30}); 
+					break;
+			}	
 		})
   	</script>	
 </body>
