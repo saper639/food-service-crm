@@ -1,16 +1,16 @@
 var Pr = MODULE('Promise');   
 
 NEWSCHEMA('User', function(schema) {
-	schema.define('id'        		, 'Number'     	  	          );  	
-	schema.define('first_name'      , 'String(50)',  true, 'cu' 	  );  	
+	schema.define('id'        		, 'Number'     	  	           );  	
+	schema.define('first_name'      , 'String(50)',  true, 'cu'    );  	
 	schema.define('last_name'       , 'String(50)',  true, 'cu'    );  	
-	schema.define('role'   		    , 'Number'    ,	  	   'c'     );  	
+	schema.define('role'   		    , 'Number'    ,	  	   'cu'    );  	
 	schema.define('status'   	    , 'Number'    ,	  	   'c'     );  	
 	schema.define('email'   	    , 'String(50)',   	   'cu'    );  	
 	schema.define('phone'   	    , 'String(20)',   	   'cu'    );  	
-	schema.define('login'   	    , 'String(20)',   	   'c'	  );  	
-	schema.define('password'   	    , 'String(50)',   	   'c'	  );  	
-	schema.define('telegram_uid'    , 'String(50)',	  	   'cu'	  );  	
+	schema.define('login'   	    , 'String(20)',   	   'c'	   );  	
+	schema.define('password'   	    , 'String(50)',   	   'c'	   );  	
+	schema.define('telegram_uid'    , 'String(50)',	  	   'cu'	   );  	
 	schema.define('created_at'      , 'Datetime'  ,	  	   'c'     );  	
 	schema.define('updated_at'      , 'Datetime'  ,	       'u'     );  	
 
@@ -18,6 +18,7 @@ NEWSCHEMA('User', function(schema) {
 
 	schema.setDefault(function(property) {    		
 		if (property === 'status')      	   return 1;   	
+		if (property === 'telegram_uid')       return null;  
 		if (property === 'created_at')         return new Date();   	
 		if (property === 'updated_at')         return new Date();   	
   	}); 
@@ -120,6 +121,10 @@ NEWSCHEMA('User', function(schema) {
                 else builder.sort('created_at', true);
             if (o.search) {
                 builder.scope(function() {                  
+                	builder.like('fisrt_name', o.search, '*');  
+                	builder.or();
+                	builder.like('last_name', o.search, '*');  
+                	builder.or();
                     builder.like('login', o.search, '*');         
                     builder.or();
                     builder.like('email', o.search, '*');                                 

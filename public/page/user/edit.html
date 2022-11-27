@@ -1,0 +1,81 @@
+<div class='row' data-scope="UserEdit">
+	<div class='col-md-8 center-block' style='float:none'>
+		<div class='box box-default'>
+			<div class="box-header with-border">
+				@(User Params)    	
+			</div>
+			<div class="box-body">
+				<div class="form-group">                              
+					<div data---="textbox__?.form.first_name__placeholder:@(Input first name...);class:form-control;required:true;maxlength:100">@(First Name)</div>
+				</div>	
+				<div class="form-group">                              
+					<div data---="textbox__?.form.last_name__placeholder:@(Input last name...);class:form-control;required:true;maxlength:100">@(Last Name)</div>
+				</div>	
+				<div class="form-group">                              
+					<div data---="textbox__?.form.email__placeholder:@(Input email...);class:form-control;required:true;type:email;">@(Email)</div>
+				</div>	
+				<div class="form-group">                              
+					<div data---="textbox__?.form.phone__placeholder:@(Input phone...);class:form-control;required:true;type:phone;">@(Phone)</div>
+				</div>	
+				<div class="form-group">                              
+					<div data---="textbox__?.form.login__placeholder:@(Input login...);class:form-control;required:true;">@(Login)</div>
+				</div>	
+				<div class="form-group">        	    	        	    
+	        		<div data---="dropdown__?.form.role__items:Admin|1,Manager|2,Courier|3;empty:@(Choice role);type:number;class:form-control;required:true;">@(Role)</div>
+	    		</div>               	 	     				
+				<div class="form-group">        	    	        	    
+	        		<div data---="dropdown__?.form.status__items:Active|1,Blocked|0;empty:@(Choice status);type:number;class:form-control;required:true;">@(Status)</div>
+	    		</div>               	 	     				
+			</div>	
+			<div class="box-footer text-center mt12">        		
+				<button type="button" class="btn btn-primary exec" data-exec="?/save" @{resource('spin')}>@(Save)</button>
+			</div>	
+		</div>	
+	</div>	
+</div>
+<script>
+PLUGIN('UserEdit', function(exports){		
+	exports.reload = function() {
+		EXEC('?/clear');		
+		var [id] = NAV.params;
+
+		if (!id)	{
+			SET('current.title', '@(User add)');
+			SET('current.description', '@(You can add new user)');									
+		} else {	
+			SET('current.title', '@(User edit)');
+			SET('current.description', '@(You can edit user)');				
+			AJAX('GET /api/user', {'id' : id}, (res, err) =>{								
+				if (err || !res.success) {
+					setTimeout(REDIRECT, '/user/search', 300); 
+					return false; 					
+				}
+				ON('ready', function() {
+					SET('?.form', res.value);	
+				});
+			})	 
+		}	
+	};
+
+	exports.save = function(e) {						
+		if (VALIDATE('?.form.*') == false) return;
+		$(e.element).button('loading');
+		var form = GET('?.form');		
+		AJAX('POST /api/user', form, (res, err) => {
+			$(e.element).button('reset');  
+			if (err || !res.success) {
+				SETTER('notify', 'append', 'Error! The user was not saved.', 2);        			
+    			return;
+			}
+   			if (res.success) {                
+	  			SETTER('notify', 'append', '@(User was successfully saved)'); 
+	  			setTimeout(()=>REDIRECT('/user/search'), 3000);		  				
+  			}					
+		})		
+	};
+
+	exports.clear = function() {						
+		SET('?.form @reset', {});					
+	};
+});	
+</script>
