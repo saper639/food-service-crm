@@ -15,7 +15,7 @@
   	<div data---="notify"></div>   
   	<div data---="confirm"></div>      
   	<div data---="menu"></div>
-  <!-- 	<div data---="markdown"></div> -->
+	<div data---="websocket__wsmess__url:/ws"></div>  
   	<div data---="autocomplete__null__height:150"></div>
   	<!-- wrapper -->
   	<div class="wrapper">  
@@ -132,6 +132,9 @@
 		ROUTE('/order/search', function() {
 			SET('common.page', 'order_search');
 		});
+		ON('message', function(data) {
+			console.log(data);
+		})
   	</script>	
 </body>
 </html>
