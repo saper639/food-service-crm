@@ -42,7 +42,7 @@ NEWSCHEMA('User', function(schema) {
 			if (o.email) builder.where('email', o.email);
 			if (o.login) builder.where('!lower(login)', o.login);  
 			if (o.role) builder.in('role', o.role);	    	
-			if (o.pass) builder.where('pass', o.pass.md5());	    				
+			if (o.password) builder.where('password', o.password.md5());	    				
 			if (U.isArray(o.status)) builder.in('status', o.status);      		                  		
 	       		else if (typeof o.status == 'string') builder.in('status', (o.status == 'active') ? [1] : (o.status == 'all') ? [0,1] : [0]);                             	
 	        	else if (isNum(o.status)) builder.where('status', o.status);                               
@@ -120,7 +120,7 @@ NEWSCHEMA('User', function(schema) {
 
 NEWSCHEMA('User/Login', function(schema) {
 	schema.define('email', 'String(100)', true); 
-	schema.define('pass', 'String(40)',  true);    
+	schema.define('password', 'String(40)',  true);    
 	schema.define('autologin', Boolean, false);
 
 	schema.addWorkflow('exec', async function($) {
@@ -132,4 +132,6 @@ NEWSCHEMA('User/Login', function(schema) {
         	    return;
  		} 
         })
+    }
+)
 })
