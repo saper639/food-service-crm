@@ -37,11 +37,16 @@ exports.setConstant = function() {
 exports.setCompany = function() {	
 	F.global.company = U.parseJSON(CONF.company)||{};          	
 }
-/**
- * Type of root directory depending on the role
- * @param {Number} role role type
- * @return {String} the path for the redirect
+
+/** 
+ * set CDN
  */
+exports.setCDN = function() {
+    MAIN.cdn = {};    
+    CONF.cdn = U.parseJSON(CONF.cdn)||{};        
+    MAIN.cdn.upload = CONF.cdn.host+'/upload?key='+CONF.cdn.key;    
+}
+
 global.rootPath = function rootPath(role) {        
     var redirect;
     switch(role) {

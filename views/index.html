@@ -7,7 +7,7 @@
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">     
 	@{import('vendor.min.css', 'app.min.css', 'vendor.min.js', 'app.min.js', 'favicon.ico')}
 </head>
-<body class="hold-transition skin-purple sidebar-mini fixed"> 	
+<body class="hold-transition skin-purple sidebar-mini fixed" data---="exec"> 	
 	<div data---="LAZY message__null__button:@(Close);style:2"></div>	
 	<div data---="audio__common.volume"></div>
 	<div data---="loading" class="hidden"></div>
@@ -15,10 +15,11 @@
   	<div data---="notify"></div>   
   	<div data---="confirm"></div>      
   	<div data---="menu"></div>
-  <!-- 	<div data---="markdown"></div> -->
+	<div data---="websocket__wsmess__url:/ws"></div>  
   	<div data---="autocomplete__null__height:150"></div>
+	<div data---="toast__null__timeout:6;format:dd\.MM\.yyyy hh\:mm;animate:fade;"></div>
   	<!-- wrapper -->
-  	<div class="wrapper" data---="exec">  
+  	<div class="wrapper">  
   		<!-- header -->
   	 	<header class="main-header">
 			<!-- logo -->
@@ -118,6 +119,27 @@
 		ROUTE('/user/search', function() {
 			SET('common.page', 'user_search');
 		});
+		ROUTE('/user/add', function() {					
+			SET('common.page', 'user_edit');
+		});
+		ROUTE('/user/edit/{id}', function(id) {									
+			SET('common.page', 'user_edit');
+		});
+		//product
+		ROUTE('/product/search', function() {
+			SET('common.page', 'product_search');
+		});
+		//order
+		ROUTE('/order/search', function() {
+			SET('common.page', 'order_search');
+		});
+		ON('message', function(data) {
+			switch (data.type) {
+				case 'notify' : 
+					FIND('toast').success('<b>@(New order)</b><br>Order id: {0}'.format(data.value.orderId), {'timeout': 30}); 
+					break;
+			}
+		})
   	</script>	
 </body>
 </html>

@@ -1,0 +1,69 @@
+<div data-scope="winProductCU" data---="miniform__common.form__if:product_cu;$id:product_cu;zindex:710;width:400;title:@(Add product);closeesc:true;reload:?/reload;submit:?/save" class="hidden">
+	<div class='p10'>   
+		<div class='text-center center-block' style="padding:20px;max-width:300px">
+			<img data-bind="?.form.thumb__src:value" src='' class='img-responsive'>
+			<a href='javascript:void(0);' class='exec mr10' data-exec="?/upload_thumb"><i class="fas fa-cloud-upload"></i> @(Upload)</a>
+			<a href='javascript:void(0);' class='exec' data-exec="?/remove_thumb"><i class="fas fa-trash-alt"></i> @(Remove)</a>
+		</div>
+		<div class="form-group">        	    	        	    
+        	<div data---="dropdown__?.form.category_id__datasource:?.list.Category;empty:@(Choice category);type:number;class:form-control;required:true;">@(Category)</div>
+        </div>	            	
+        <div class="form-group">        	    	        	    
+	        <div data---="textbox__?.form.name__placeholder:@(Name product)...;class:form-control;maxlength:200;required:true;">
+	        	@(Name)
+	       	</div>
+	    </div>               	 	     		
+	    <div class="form-group">        	    	        	    
+	        <div data---="dropdown__?.form.status__items:Active|1,Blocked|0,Removed|1;empty:@(Choice status);type:number;class:form-control;required:true;">@(Status)</div>
+	    </div>               	 	     				
+	    <div data---="textarea__?.form.summary__placeholder:@(Summary)">@(Summary)</div>
+	    <div class="form-group">        	    	        	    
+	        <div data---="textbox__?.form.price__class:form-control;maxlength:200;type:number;required:true;">
+	        	@(Price)
+	       	</div>
+	    </div>               	 	     			    
+	    <nav class='text-right'>				
+			<button name="submit" class='btn btn-success mh5'>@(Save)</button>
+			<button name="cancel" class='btn mh5'>@(Close)</button>
+		</nav>
+	</div>	
+</div>	
+<script>
+PLUGIN('winProductCU', function(exports){
+	exports.reload = function() {				
+		AJAX('GET /api/product/category/query', {}, 'value-->?.list.Category');					
+	};		
+	exports.upload_thumb = function() {
+		var opt = {};
+
+		opt.url = '/cdn/upload';
+		opt.accept = 'image/*';
+		opt.multiple = false;
+
+		opt.callback = function(resp) {			
+			if (resp.success) {
+				SET('?.form.thumb', '/cdn/'+resp.value[0].filepath);
+			}
+		};
+		SETTER('upload', 'show', opt);
+	};
+	exports.clear = function() {						
+		SET('?.form @reset', {});			
+	};	
+	exports.save = function() {
+		if (VALIDATE('?.form.*') == false) return;
+		var form = GET('?.form');
+		AJAX('POST /api/product', form, (res, err) => {
+			if (err || !res.success) {
+				SETTER('notify', 'append', '@(Error when adding a product)', 2);        			
+        		return;
+        	};	        
+        	SET('common.form', null);
+        	EXEC('?/clear');
+        	EXEC('ProductSearch/refreshGrid');
+        	SETTER('notify', 'append', '@(Product added successfully)');        	
+        	return;
+		})	
+	};
+})	
+</script>
