@@ -118,6 +118,12 @@
 		ROUTE('/user/search', function() {
 			SET('common.page', 'user_search');
 		});
+		ROUTE('/user/add', function() {					
+			SET('common.page', 'user_edit');
+		});
+		ROUTE('/user/edit/{id}', function(id) {									
+			SET('common.page', 'user_edit');
+		});
 		//product
 		ROUTE('/product/search', function() {
 			SET('common.page', 'product_search');

@@ -1,6 +1,6 @@
 <!-- user -->
-<template id='taUserNick'>
-	<a href="#" onclick="return false;" class='link_unstyled userDetail'>{{nickname}}</a>
+<template id='taUserFio'>
+	<a href="#" onclick="return false;" class='link_unstyled userDetail'>{{first_name}} {{last_name}}</a>
 </template>
 <template id='taUser'>
 	<a href="#" onclick="return false;" class='link_unstyled userDetail'>
@@ -27,6 +27,20 @@
 	{{else if status == 0}}<span class='text-gray text-nowrap' title='@(Blocked)'><i class="fas fa-circle"
 			aria-hidden="true"></i></span>
 	{{fi}}
+</template>
+<template id="taUserAct">  
+	<div class="btn-group">
+		<a class="btn btn-default btn-sm edit" href="javascript:void(0)" title="@(Edit user)"><i class="fa fa-edit fa-fw"></i></a>		
+		<a class="btn btn-default btn-sm remove" href="javascript:void(0)" title='@(Remove user)'><i class="fa fa-trash-alt fa-fw"></i></a>
+	</div>	  
+</template>
+<template id="taUserRole">
+{{if role == 0}} @(Guest)
+	{{else if role == 1}}@(Admin)
+	{{else if role == 2}}@(Manager)
+	{{else if role == 3}}@(User)
+	{{else if role == 4}}@(Courier)
+{{fi}}
 </template>
 <template id="taProductAct">
 	<div class="btn-group">
