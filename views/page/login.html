@@ -10,14 +10,14 @@
 		<form action="/login" method="POST" id='frmLogin' class='mb10'> 
 			<div class="form-group has-feedback">
             	<div data---="textbox__?.form.login__required:true;placeholder:Login;error:@(Input login);class:form-control;"></div>      
-            	<span class="fa fa-envelope form-control-feedback" aria-hidden="true"></span>
+            	<span class="fa fa-user form-control-feedback" aria-hidden="true"></span>
         	</div>
         	<div class="form-group has-feedback">
             	<div data---="textbox__?.form.password__required:true;placeholder:Password;type:password;error:@(Input password);class:form-control;"></div>
             	<span class="fa fa-lock form-control-feedback" aria-hidden="true"></span>
         	</div> 
         	<div class="form-group">
-            	<div data-jc="error___errors"></div>
+            	<div data-jc="error___?.errors"></div>
         	</div>    
         	<div class="row">
 	            <div class="col-xs-7">
@@ -26,7 +26,7 @@
 	                </div>    
 	            </div>    
 	            <div class="col-xs-5">	  	            		               
-	               <button type="button" data-jc="click__?.submit__enter:#frmLogin" class="btn btn-primary btn-block" data-bind="?__init:spin">@(Enter)</button>
+	               <button type="button" data---="click__?.submit__enter:#frmLogin" class="btn btn-primary btn-block" data-bind="?__init:spin">@(Enter)</button>
 	            </div>    
         	</div>	
 		</form>		
@@ -40,20 +40,19 @@ PLUGIN('Auth', function(exports) {
 	exports.submit = function(e) {														
 		if (!VALIDATE('?.*')) return;		
 		var form = GET('?.form');		
-		console.log(e);
 		$(e).button('loading');    
-		AJAX('POST /api/manager/login', form, function(res, err) {                         
+		AJAX('POST /api/user/login', form, function(res, err) {                         
             $(e).button('reset');                                 
             if (err) {  
-                SET('errors', '@{resource('!unexpected')}');            
+                SET('?.errors', '@{resource(`!unexpected`)}');            
                 return;
             }
             if (res.success) {
-                SET('errors', null);              
+                SET('?.errors', null);              
                 window.location = '/';
                 return;
             }                        
-            SET('errors', res.error||res);            
+            SET('?.errors', res.error||res);            
         })
 	};
 });	

@@ -1,3 +1,5 @@
+var Pr = MODULE('Promise');  
+
 NEWSCHEMA('User', function(schema) {
     schema.define('id', 'Number');  	
 	schema.define('first_name', 'String(50)', true, 'cu');  	
@@ -7,8 +9,9 @@ NEWSCHEMA('User', function(schema) {
 	schema.define('email', 'String(50)', 'cu');  	
 	schema.define('phone', 'String(20)', 'cu');  	
     schema.define('address', 'String(40)', 'cu');  
-	schema.define('login', 'String(20)', 'c');  	
-	schema.define('password', 'String(50)', 'c');  	
+	schema.define('login', 'String(40)', true);
+	schema.define('password', 'String(50)', true);    
+	schema.define('autologin', 'Boolean', false);;  	
 	schema.define('telegram_uid', 'String(50)',	'cu');  	
 
 	schema.define('created_at', 'Datetime',	'c');  	
@@ -109,13 +112,22 @@ NEWSCHEMA('User', function(schema) {
 	});
 
 	schema.addWorkflow('exec', async function($) {
-    try {
-       //
-    } catch (err) {
-        LOGGER('error', 'Login', err);                 
-            $.invalid('!auth');                    
-            return;
-     } 
+        var model = schema.clean($.model);
+        var user = await Pr.get('User', model);	
+
+        if (!user) {            	
+            $.success(false, RESOURCE('!user_pass'));                
+            return; 
+        }		
+
+        var opt = {};
+        opt.name = CONF.cookie;
+        opt.key = CONF.cookie_secret;
+        opt.id = user.id;
+        opt.expire = (model.autologin) ? '20 days' : '1 day';    
+        opt.data = user;  
+        MAIN.session.setcookie($, opt, $.done());            
+        AUDIT('users', $, 'login', user.id + ': ' + user.login);
     })
 
 NEWSCHEMA('User/Login', function(schema) {
