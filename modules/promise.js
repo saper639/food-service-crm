@@ -5,7 +5,6 @@ exports.get = function(schema, helper, controller) {
 	return new Promise((resolve, reject) => {
 	  	$$$(schema).get(helper, (err, res) =>{	  		  	
 	  		if (err) reject(err);
-	  		if (!res.success) reject();
 	  		resolve(res.value);	  	
 	  	}, controller);
 	}); 
