@@ -2,7 +2,7 @@ exports.install = function() {
 	WEBSOCKET('+ /ws', handler, ['json'], 3)
 }	
 
-F.global.WS = null
+F.global.WS = null;
 
 
 function handler() {

@@ -16,6 +16,7 @@ cookie_secret               : cpbbd83hd92gd
 db                          : mysql://<user>:<password>@<host>:<port>/<db>
 db_log                      : true
 cdn			    : {"host": "http://45.153.231.101:8989", "key":"gjkd75893"}
+mqtt                        : http://<host>
 //Company
 company                     : {"brand": "Univer", "name": "Ltd.Univer", "phone": "+7 (9021) 999-999", "email": "support@univer.im", "web" : "http://univer.im"}
 //Setting
