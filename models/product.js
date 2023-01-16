@@ -77,8 +77,8 @@ NEWSCHEMA('Product').make(function(schema) {
         sql.debug = true;
 
         sql.listing('product', 'product').make(function(builder) {
-        	if (o.category_id) {
-                builder.where('up', o.category_id);                
+        	if (o.category_id > 0) {
+                builder.where('category_id', o.category_id);                
             }               
             if (o.sort) builder.sort(o.sort, (o.order=='asc') ? false : true);
                 else builder.sort('created_at', true);
@@ -94,7 +94,7 @@ NEWSCHEMA('Product').make(function(schema) {
         })	
         sql.exec(function(err, resp) {
             if (err) {
-                logger.error('Product/grid', err);          
+                LOGGER('error', 'Product/grid', err);           
                 $.callback([]); 
             }           
             return $.callback({'total': resp.count, 'rows': resp.items});            
