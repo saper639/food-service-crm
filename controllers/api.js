@@ -6,10 +6,10 @@ exports.install = function() {
     ROUTE('GET    /api/user/grid',       			  ['*User-->@grid']       );   
     ROUTE('DELETE /api/user/{id}',      			  ['*User-->@remove']     );
 
-
     //product   
-    ROUTE('POST   /api/product',                      ['*Product-->@save']    );        
-    ROUTE('GET    /api/product',                      ['*Product-->@get']     );        
+    ROUTE('POST   /api/product',                      ['*Product-->@save']    ); 
+    ROUTE('GET    /api/product',                      ['*Product-->@get']     );    
+    ROUTE('DELETE /api/product/{id}',                 ['*Product-->@remove']  );       
     ROUTE('GET    /api/product/grid',                 ['*Product-->@grid']    );        
 
     //product category
