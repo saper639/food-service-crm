@@ -58,9 +58,9 @@ NEWSCHEMA('User', function(schema) {
                 LOGGER('error', 'User/get', err);          
                 return $.success(false);	        
             }    
-            //if (!resp) $.success(false);
-            //return $.success(true, resp);
-            return $.callback(resp||null);
+            //return $.callback(resp||null);
+            if (!resp) $.success(false);
+            return $.success(true, resp);
 		}, 'user')	
 	});
 
